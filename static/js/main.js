@@ -112,7 +112,7 @@ function updateCartItemAjax(itemId, quantity, csrfToken) {
                 // Update total display if present
                 const totalEl = document.getElementById('cartTotal');
                 if (totalEl && data.total) {
-                    totalEl.textContent = parseFloat(data.total).toLocaleString('vi-VN') + ' ₫';
+                    totalEl.textContent = parseInt(data.total, 10).toLocaleString('vi-VN') + ' ₫';
                 }
             }
         })

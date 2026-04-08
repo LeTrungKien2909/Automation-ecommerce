@@ -35,8 +35,11 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, f'Chào mừng, {user.first_name or user.username}!')
-                next_url = request.GET.get('next', 'products:list')
-                return redirect(next_url)
+                next_url = request.GET.get('next', '')
+                from django.utils.http import url_has_allowed_host_and_scheme
+                if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+                    return redirect(next_url)
+                return redirect('products:list')
             else:
                 messages.error(request, 'Tên đăng nhập hoặc mật khẩu không đúng.')
     else:

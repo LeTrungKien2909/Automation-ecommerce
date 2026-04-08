@@ -67,9 +67,9 @@
                         {% if product.discount_price %}
                         <span class="h3 text-danger fw-bold">{{ product.discount_price|floatformat:0 }} ₫</span>
                         <span class="text-muted text-decoration-line-through ms-2">{{ product.price|floatformat:0 }} ₫</span>
-                        <span class="badge bg-danger ms-2">
-                            -{% widthratio product.discount_price product.price 100 as pct %}{{ 100|add:"-"|stringformat:"s"|add:pct|add:"%" }}
-                        </span>
+                        {% if product.price %}
+                        <span class="badge bg-danger ms-2">Giảm giá</span>
+                        {% endif %}
                         {% else %}
                         <span class="h3 text-primary fw-bold">{{ product.price|floatformat:0 }} ₫</span>
                         {% endif %}

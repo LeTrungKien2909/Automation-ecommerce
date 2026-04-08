@@ -1,3 +1,4 @@
+from decimal import Decimal, InvalidOperation
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -27,13 +28,13 @@ def product_list(request):
     max_price = request.GET.get('max_price')
     if min_price:
         try:
-            products = products.filter(price__gte=float(min_price))
-        except ValueError:
+            products = products.filter(price__gte=Decimal(min_price))
+        except (InvalidOperation, ValueError):
             pass
     if max_price:
         try:
-            products = products.filter(price__lte=float(max_price))
-        except ValueError:
+            products = products.filter(price__lte=Decimal(max_price))
+        except (InvalidOperation, ValueError):
             pass
 
     paginator = Paginator(products, 12)
