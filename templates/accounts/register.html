@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Register - AutomationPro{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card border-0 shadow">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-person-plus-fill text-warning" style="font-size: 3rem;"></i>
+                        <h2 class="fw-bold mt-2">Create Account</h2>
+                        <p class="text-muted">Join AutomationPro for exclusive access to industrial equipment</p>
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-warning w-100 fw-bold btn-lg mt-3">
+                            <i class="bi bi-person-check me-2"></i>Create Account
+                        </button>
+                    </form>
+                    <hr class="my-4">
+                    <p class="text-center text-muted mb-0">
+                        Already have an account? <a href="{% url 'accounts:login' %}" class="text-warning fw-bold">Sign in</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

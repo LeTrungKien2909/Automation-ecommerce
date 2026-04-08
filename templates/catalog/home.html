@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}AutomationPro - Industrial Automation Equipment & Services{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center py-5">
+            <div class="col-lg-7">
+                <span class="badge bg-warning text-dark mb-3 px-3 py-2">Industrial Grade Equipment</span>
+                <h1 class="display-4 fw-bold text-white mb-4">
+                    Power Your <span class="text-warning">Industrial</span><br>Operations
+                </h1>
+                <p class="lead text-white-50 mb-4">
+                    Premium automation equipment, PLCs, sensors, drives and professional maintenance services for your industrial facility.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'catalog:product_list' %}" class="btn btn-warning btn-lg px-4 fw-bold">
+                        <i class="bi bi-box-seam me-2"></i>Browse Products
+                    </a>
+                    <a href="{% url 'services:service_list' %}" class="btn btn-outline-light btn-lg px-4">
+                        <i class="bi bi-tools me-2"></i>Our Services
+                    </a>
+                </div>
+                <div class="row mt-5 g-3">
+                    <div class="col-4 text-center">
+                        <div class="text-warning fw-bold fs-3">500+</div>
+                        <div class="text-white-50 small">Products</div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div class="text-warning fw-bold fs-3">24/7</div>
+                        <div class="text-white-50 small">Support</div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div class="text-warning fw-bold fs-3">99%</div>
+                        <div class="text-white-50 small">Uptime SLA</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-flex justify-content-center">
+                <div class="hero-icon-container">
+                    <i class="bi bi-cpu-fill text-warning" style="font-size: 12rem; opacity: 0.15;"></i>
+                    <div class="hero-badge hero-badge-1">
+                        <i class="bi bi-check-circle-fill text-success me-1"></i>In Stock
+                    </div>
+                    <div class="hero-badge hero-badge-2">
+                        <i class="bi bi-shield-check text-warning me-1"></i>Certified
+                    </div>
+                    <div class="hero-badge hero-badge-3">
+                        <i class="bi bi-truck text-info me-1"></i>Fast Delivery
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Category Cards -->
+{% if categories %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold">Browse by Category</h2>
+            <p class="text-muted">Find the right equipment for your application</p>
+        </div>
+        <div class="row g-3">
+            {% for category in categories %}
+            <div class="col-6 col-md-4 col-lg-2">
+                <a href="{% url 'catalog:product_list' %}?category={{ category.slug }}" class="text-decoration-none">
+                    <div class="card h-100 text-center border-0 shadow-sm category-card">
+                        <div class="card-body py-4">
+                            <div class="category-icon mb-3">
+                                <i class="bi bi-gear-wide-connected fs-1 text-warning"></i>
+                            </div>
+                            <h6 class="card-title fw-bold text-dark mb-1">{{ category.name }}</h6>
+                            <small class="text-muted">{{ category.products.count }} items</small>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+            <div class="col-6 col-md-4 col-lg-2">
+                <a href="{% url 'catalog:product_list' %}" class="text-decoration-none">
+                    <div class="card h-100 text-center border-0 shadow-sm category-card bg-warning">
+                        <div class="card-body py-4 d-flex flex-column justify-content-center">
+                            <i class="bi bi-grid-3x3-gap fs-1 text-dark mb-2"></i>
+                            <h6 class="card-title fw-bold text-dark">View All</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Featured Products -->
+{% if featured_products %}
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold mb-1">Featured Products</h2>
+                <p class="text-muted mb-0">Top-rated industrial automation equipment</p>
+            </div>
+            <a href="{% url 'catalog:product_list' %}" class="btn btn-outline-dark">View All <i class="bi bi-arrow-right ms-1"></i></a>
+        </div>
+        <div class="row g-4">
+            {% for product in featured_products %}
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card h-100 product-card border-0 shadow-sm">
+                    <div class="product-img-wrapper">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top product-img" alt="{{ product.name }}">
+                        {% else %}
+                        <div class="product-img-placeholder d-flex align-items-center justify-content-center">
+                            <i class="bi bi-cpu text-muted" style="font-size: 4rem;"></i>
+                        </div>
+                        {% endif %}
+                        {% if product.discount_price %}
+                        <span class="badge bg-danger position-absolute top-0 end-0 m-2">SALE</span>
+                        {% endif %}
+                        {% if product.condition == 'refurbished' %}
+                        <span class="badge bg-info position-absolute top-0 start-0 m-2">Refurbished</span>
+                        {% endif %}
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <div class="text-muted small mb-1">{{ product.category.name }}</div>
+                        <h6 class="card-title fw-bold">{{ product.name }}</h6>
+                        <div class="text-muted small mb-2">SKU: {{ product.sku }}</div>
+                        {% if product.brand %}
+                        <div class="text-muted small mb-2"><i class="bi bi-tag me-1"></i>{{ product.brand }}</div>
+                        {% endif %}
+                        <div class="mt-auto">
+                            <div class="d-flex align-items-center mb-3">
+                                {% if product.discount_price %}
+                                <span class="fs-5 fw-bold text-danger">${{ product.discount_price }}</span>
+                                <span class="text-muted text-decoration-line-through ms-2">${{ product.price }}</span>
+                                {% else %}
+                                <span class="fs-5 fw-bold text-dark">${{ product.price }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'catalog:product_detail' product.slug %}" class="btn btn-outline-dark btn-sm flex-grow-1">Details</a>
+                                {% if product.stock > 0 %}
+                                <a href="{% url 'cart:add_to_cart' product.id %}" class="btn btn-warning btn-sm">
+                                    <i class="bi bi-cart-plus"></i>
+                                </a>
+                                {% else %}
+                                <button class="btn btn-secondary btn-sm" disabled>Out of Stock</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Services Section -->
+<section class="py-5 bg-dark text-white">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Professional Maintenance Services</h2>
+            <p class="text-white-50">Keep your equipment running at peak performance</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-3 text-center">
+                <div class="service-feature-icon mb-3">
+                    <i class="bi bi-tools text-warning" style="font-size: 2.5rem;"></i>
+                </div>
+                <h5 class="fw-bold">Preventive Maintenance</h5>
+                <p class="text-white-50 small">Regular inspections and maintenance to prevent costly breakdowns</p>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="service-feature-icon mb-3">
+                    <i class="bi bi-lightning-charge text-warning" style="font-size: 2.5rem;"></i>
+                </div>
+                <h5 class="fw-bold">Emergency Repair</h5>
+                <p class="text-white-50 small">24/7 emergency response for critical equipment failures</p>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="service-feature-icon mb-3">
+                    <i class="bi bi-diagram-3 text-warning" style="font-size: 2.5rem;"></i>
+                </div>
+                <h5 class="fw-bold">System Integration</h5>
+                <p class="text-white-50 small">Expert integration of automation systems and components</p>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="service-feature-icon mb-3">
+                    <i class="bi bi-clipboard-check text-warning" style="font-size: 2.5rem;"></i>
+                </div>
+                <h5 class="fw-bold">Compliance & Audit</h5>
+                <p class="text-white-50 small">Safety compliance checks and regulatory audit support</p>
+            </div>
+        </div>
+        <div class="text-center mt-5">
+            <a href="{% url 'services:create_request' %}" class="btn btn-warning btn-lg px-5 fw-bold">
+                <i class="bi bi-calendar-check me-2"></i>Schedule a Service
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Trust Badges -->
+<section class="py-4 border-top border-bottom">
+    <div class="container">
+        <div class="row g-3 text-center">
+            <div class="col-6 col-md-3">
+                <i class="bi bi-truck text-warning fs-2 d-block mb-2"></i>
+                <div class="fw-bold">Free Shipping</div>
+                <div class="text-muted small">On orders over $500</div>
+            </div>
+            <div class="col-6 col-md-3">
+                <i class="bi bi-shield-check text-warning fs-2 d-block mb-2"></i>
+                <div class="fw-bold">Quality Certified</div>
+                <div class="text-muted small">ISO 9001 Certified</div>
+            </div>
+            <div class="col-6 col-md-3">
+                <i class="bi bi-headset text-warning fs-2 d-block mb-2"></i>
+                <div class="fw-bold">Expert Support</div>
+                <div class="text-muted small">Mon-Fri 8AM-6PM</div>
+            </div>
+            <div class="col-6 col-md-3">
+                <i class="bi bi-arrow-counterclockwise text-warning fs-2 d-block mb-2"></i>
+                <div class="fw-bold">Easy Returns</div>
+                <div class="text-muted small">30-day return policy</div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

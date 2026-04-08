@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Checkout - AutomationPro{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="fw-bold mb-4"><i class="bi bi-credit-card me-2 text-warning"></i>Checkout</h1>
+
+    <div class="row g-4">
+        <!-- Shipping Form -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white fw-bold border-bottom">
+                    <i class="bi bi-truck me-2 text-warning"></i>Shipping Information
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" id="checkoutForm">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold mt-3">
+                            <i class="bi bi-check-circle me-2"></i>Place Order
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm sticky-top" style="top: 80px;">
+                <div class="card-header bg-dark text-white fw-bold">
+                    <i class="bi bi-bag-check me-2"></i>Order Summary
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for item in cart.items.all %}
+                        <div class="list-group-item d-flex align-items-center gap-3 py-3">
+                            {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}"
+                                 class="rounded" style="width:50px; height:50px; object-fit:cover;">
+                            {% else %}
+                            <div class="bg-light rounded d-flex align-items-center justify-content-center flex-shrink-0" style="width:50px; height:50px;">
+                                <i class="bi bi-cpu text-muted"></i>
+                            </div>
+                            {% endif %}
+                            <div class="flex-grow-1">
+                                <div class="fw-semibold small">{{ item.product.name }}</div>
+                                <div class="text-muted small">Qty: {{ item.quantity }} × ${{ item.product.effective_price }}</div>
+                            </div>
+                            <div class="fw-bold">${{ item.subtotal }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Subtotal</span>
+                            <span>${{ cart.total }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Shipping</span>
+                            <span class="text-success fw-bold">FREE</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between fw-bold fs-5">
+                            <span>Total</span>
+                            <span class="text-warning">${{ cart.total }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

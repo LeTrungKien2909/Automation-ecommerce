@@ -1,0 +1,222 @@
+/* ============================================
+   AutomationPro - Custom Styles
+   ============================================ */
+
+:root {
+    --primary: #ffc107;
+    --dark: #212529;
+    --light-bg: #f8f9fa;
+    --card-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    --card-hover-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    --transition: all 0.3s ease;
+}
+
+/* ---- Global ---- */
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
+}
+
+a {
+    transition: var(--transition);
+}
+
+/* ---- Navbar ---- */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.navbar-brand {
+    font-size: 1.4rem;
+    letter-spacing: 0.5px;
+}
+
+/* ---- Hero Section ---- */
+.hero-section {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+    padding: 80px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255,193,7,0.08) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.hero-icon-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-badge {
+    position: absolute;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50px;
+    padding: 8px 16px;
+    color: #fff;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.hero-badge-1 { top: 20%; right: -5%; }
+.hero-badge-2 { top: 50%; left: -10%; }
+.hero-badge-3 { bottom: 20%; right: 5%; }
+
+/* ---- Product Cards ---- */
+.product-card {
+    transition: var(--transition);
+    border-radius: 12px !important;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-hover-shadow) !important;
+}
+
+.product-img-wrapper {
+    position: relative;
+    overflow: hidden;
+    height: 200px;
+    background: #f8f9fa;
+}
+
+.product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.product-card:hover .product-img {
+    transform: scale(1.05);
+}
+
+.product-img-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+}
+
+/* ---- Category Cards ---- */
+.category-card {
+    transition: var(--transition);
+    border-radius: 12px !important;
+    cursor: pointer;
+}
+
+.category-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--card-hover-shadow) !important;
+}
+
+/* ---- Service Cards ---- */
+.service-card {
+    transition: var(--transition);
+    border-radius: 12px !important;
+    border-left: 4px solid var(--primary) !important;
+}
+
+.service-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--card-hover-shadow) !important;
+}
+
+/* ---- Buttons ---- */
+.btn-warning {
+    color: #000;
+    font-weight: 600;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+    color: #000;
+}
+
+/* ---- Cards ---- */
+.card {
+    border-radius: 12px !important;
+}
+
+.card-header {
+    border-radius: 12px 12px 0 0 !important;
+    padding: 0.85rem 1.25rem;
+}
+
+/* ---- Alerts ---- */
+.alert-success { border-left: 4px solid #198754; }
+.alert-error, .alert-danger { border-left: 4px solid #dc3545; }
+.alert-warning { border-left: 4px solid #ffc107; }
+.alert-info { border-left: 4px solid #0dcaf0; }
+
+/* ---- Tables ---- */
+.table th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+}
+
+/* ---- Badges ---- */
+.badge {
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+/* ---- Thumbnails ---- */
+.thumb-img {
+    cursor: pointer;
+    transition: var(--transition);
+    height: 70px;
+    object-fit: cover;
+}
+
+.thumb-img:hover {
+    border-color: var(--primary) !important;
+    opacity: 0.85;
+}
+
+/* ---- Price Section ---- */
+.price-section {
+    border-left: 4px solid var(--primary);
+}
+
+/* ---- Footer ---- */
+footer a:hover {
+    color: var(--primary) !important;
+}
+
+/* ---- Breadcrumb ---- */
+.breadcrumb-item a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 50px 0;
+        text-align: center;
+    }
+
+    .hero-section .d-flex {
+        justify-content: center !important;
+    }
+
+    .product-img-wrapper {
+        height: 160px;
+    }
+}

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Maintenance Schedule - AutomationPro{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="fw-bold mb-4"><i class="bi bi-calendar-check me-2 text-warning"></i>Maintenance Schedule</h1>
+
+    <div class="row g-4">
+        <!-- Add Schedule Form -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-dark text-white fw-bold">
+                    <i class="bi bi-plus-circle me-2"></i>Add Maintenance Schedule
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-warning w-100 fw-bold mt-2">
+                            <i class="bi bi-calendar-plus me-2"></i>Create Schedule
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule List -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white fw-bold border-bottom">
+                    <i class="bi bi-list-check me-2 text-warning"></i>Active Schedules
+                </div>
+                <div class="card-body p-0">
+                    {% if schedules %}
+                    <div class="list-group list-group-flush">
+                        {% for sched in schedules %}
+                        <div class="list-group-item py-3 px-4">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6 class="fw-bold mb-1">{{ sched.product.name }}</h6>
+                                    <div class="text-muted small mb-1">
+                                        <i class="bi bi-wrench me-1"></i>{{ sched.service_type.name|default:"General Service" }}
+                                    </div>
+                                    <div class="text-muted small">
+                                        <i class="bi bi-calendar3 me-1"></i>Next: <strong>{{ sched.next_service_date|date:"M d, Y" }}</strong>
+                                    </div>
+                                    {% if sched.notes %}
+                                    <div class="text-muted small mt-1">{{ sched.notes|truncatewords:10 }}</div>
+                                    {% endif %}
+                                </div>
+                                <span class="badge bg-info">{{ sched.get_frequency_display }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-calendar-x fs-1 mb-3 d-block"></i>
+                        <p>No maintenance schedules configured</p>
+                        <p class="small">Add a schedule using the form to the left</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
