@@ -1,0 +1,209 @@
+/* === AutoTech Custom CSS === */
+:root {
+    --primary: #1a56db;
+    --primary-dark: #1341a8;
+    --secondary: #f97316;
+    --success: #16a34a;
+    --dark: #1e293b;
+    --light-gray: #f8fafc;
+}
+
+/* === Global === */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8fafc;
+    color: #334155;
+}
+
+/* === Navbar === */
+.bg-primary-custom {
+    background-color: var(--primary) !important;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.9);
+    transition: color 0.2s;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: #fff;
+}
+
+/* === Hero Section === */
+.hero-section {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 50%, #0d2882 100%);
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    padding: 80px 0;
+}
+
+/* === Product Cards === */
+.product-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12) !important;
+}
+
+.product-img {
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+}
+
+/* === Category Cards === */
+.category-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 12px;
+}
+
+.category-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* === Cart Quantity Input === */
+.cart-qty-input {
+    width: 60px;
+    text-align: center;
+}
+
+/* === Status Badges === */
+.badge.status-pending {
+    background-color: #f59e0b;
+    color: #1c1917;
+}
+
+.badge.status-confirmed {
+    background-color: #3b82f6;
+    color: #fff;
+}
+
+.badge.status-processing {
+    background-color: #8b5cf6;
+    color: #fff;
+}
+
+.badge.status-shipped {
+    background-color: #0ea5e9;
+    color: #fff;
+}
+
+.badge.status-delivered {
+    background-color: #16a34a;
+    color: #fff;
+}
+
+.badge.status-cancelled {
+    background-color: #dc2626;
+    color: #fff;
+}
+
+.badge.status-assigned {
+    background-color: #3b82f6;
+    color: #fff;
+}
+
+.badge.status-in_progress {
+    background-color: #8b5cf6;
+    color: #fff;
+}
+
+.badge.status-completed {
+    background-color: #16a34a;
+    color: #fff;
+}
+
+/* === Footer === */
+.footer-dark {
+    background-color: #0f172a;
+}
+
+.footer-dark a:hover {
+    color: #fff !important;
+    text-decoration: underline !important;
+}
+
+/* === Buttons === */
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+.btn-warning {
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+    color: #fff;
+}
+
+.btn-warning:hover {
+    background-color: #ea6c0c;
+    border-color: #ea6c0c;
+    color: #fff;
+}
+
+/* === Cards === */
+.card {
+    border-radius: 12px;
+}
+
+/* === Auth Pages === */
+.card.shadow {
+    border-radius: 16px;
+}
+
+/* === Thumbnail Images === */
+.thumbnail-img {
+    transition: border-color 0.2s;
+}
+
+.thumbnail-img:hover {
+    border-color: var(--primary) !important;
+}
+
+/* === Pagination === */
+.page-link {
+    color: var(--primary);
+}
+
+.page-item.active .page-link {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* === Table Hover === */
+.table tbody tr:hover {
+    background-color: rgba(26, 86, 219, 0.04);
+}
+
+/* === Alert Auto-Dismiss === */
+.auto-dismiss {
+    transition: opacity 0.5s ease;
+}
+
+/* === Hero Text Opacity === */
+.text-white-25 {
+    color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+    .hero-section {
+        min-height: 350px;
+        padding: 50px 0;
+    }
+
+    .hero-section h1 {
+        font-size: 1.75rem;
+    }
+}

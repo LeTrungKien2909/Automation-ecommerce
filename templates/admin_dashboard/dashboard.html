@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - AutoTech{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h3 class="fw-bold mb-4"><i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard</h3>
+
+    <!-- Stats -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-primary text-white">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-1">Tổng đơn hàng</h6>
+                        <h3 class="fw-bold mb-0">{{ total_orders }}</h3>
+                    </div>
+                    <i class="fas fa-list-alt fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-success text-white">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-1">Sản phẩm</h6>
+                        <h3 class="fw-bold mb-0">{{ total_products }}</h3>
+                    </div>
+                    <i class="fas fa-box fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-info text-white">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-1">Người dùng</h6>
+                        <h3 class="fw-bold mb-0">{{ total_users }}</h3>
+                    </div>
+                    <i class="fas fa-users fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm bg-warning">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-1">Doanh thu</h6>
+                        <h5 class="fw-bold mb-0">{{ total_revenue|floatformat:0 }} ₫</h5>
+                    </div>
+                    <i class="fas fa-chart-line fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Recent Orders -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between">
+                    <h6 class="mb-0">Đơn hàng gần đây</h6>
+                    <a href="{% url 'admin:orders_order_changelist' %}" class="btn btn-sm btn-outline-primary">Quản lý</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table small mb-0">
+                            <thead class="table-light">
+                                <tr><th>Mã đơn</th><th>Khách hàng</th><th>Tổng</th><th>Trạng thái</th></tr>
+                            </thead>
+                            <tbody>
+                                {% for order in recent_orders %}
+                                <tr>
+                                    <td>{{ order.order_number }}</td>
+                                    <td>{{ order.user.username }}</td>
+                                    <td>{{ order.total_amount|floatformat:0 }} ₫</td>
+                                    <td><span class="badge status-{{ order.status }}">{{ order.get_status_display }}</span></td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="4" class="text-center text-muted">Chưa có đơn hàng</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Service Requests -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between">
+                    <h6 class="mb-0">Yêu cầu bảo trì gần đây</h6>
+                    <a href="{% url 'admin:maintenance_servicerequest_changelist' %}" class="btn btn-sm btn-outline-primary">Quản lý</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table small mb-0">
+                            <thead class="table-light">
+                                <tr><th>Tiêu đề</th><th>Khách hàng</th><th>Ưu tiên</th><th>Trạng thái</th></tr>
+                            </thead>
+                            <tbody>
+                                {% for req in recent_requests %}
+                                <tr>
+                                    <td>{{ req.title|truncatechars:25 }}</td>
+                                    <td>{{ req.user.username }}</td>
+                                    <td><span class="badge {% if req.priority == 'high' %}bg-danger{% elif req.priority == 'medium' %}bg-warning text-dark{% else %}bg-success{% endif %}">{{ req.get_priority_display }}</span></td>
+                                    <td><span class="badge status-{{ req.status }}">{{ req.get_status_display }}</span></td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="4" class="text-center text-muted">Chưa có yêu cầu</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

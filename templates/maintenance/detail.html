@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ service_request.title }} - AutoTech{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold mb-0">
+            <i class="fas fa-wrench me-2"></i>{{ service_request.title }}
+        </h3>
+        <a href="{% url 'maintenance:list' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Quay lại
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <!-- Details -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white d-flex justify-content-between">
+                    <h5 class="mb-0">Chi tiết yêu cầu</h5>
+                    <span class="badge status-{{ service_request.status }} fs-6">{{ service_request.get_status_display }}</span>
+                </div>
+                <div class="card-body">
+                    <p class="mb-3">{{ service_request.description }}</p>
+                    {% if service_request.notes %}
+                    <div class="alert alert-light">
+                        <strong>Ghi chú:</strong> {{ service_request.notes }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- History -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="fas fa-history me-2"></i>Lịch sử xử lý</h5>
+                </div>
+                <div class="card-body">
+                    {% if history %}
+                    <div class="timeline">
+                        {% for entry in history %}
+                        <div class="d-flex gap-3 mb-4">
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                                style="width:40px;height:40px;">
+                                <i class="fas fa-wrench text-white fa-sm"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <strong>{{ entry.technician.get_full_name|default:entry.technician.username|default:"Kỹ thuật viên" }}</strong>
+                                    <small class="text-muted">{{ entry.date|date:"d/m/Y H:i" }}</small>
+                                </div>
+                                <p class="mb-1">{{ entry.work_done }}</p>
+                                {% if entry.materials_used %}
+                                <small class="text-muted"><strong>Vật tư:</strong> {{ entry.materials_used }}</small>
+                                {% endif %}
+                                {% if entry.cost %}
+                                <div class="mt-1"><small class="text-primary"><strong>Chi phí:</strong> {{ entry.cost|floatformat:0 }} ₫</small></div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-center text-muted py-3">Chưa có lịch sử xử lý.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h6 class="mb-0">Thông tin yêu cầu</h6>
+                </div>
+                <div class="card-body">
+                    <dl>
+                        <dt>Loại dịch vụ</dt>
+                        <dd>{{ service_request.service_category.name|default:"-" }}</dd>
+                        <dt>Mức độ ưu tiên</dt>
+                        <dd>
+                            <span class="badge {% if service_request.priority == 'high' %}bg-danger{% elif service_request.priority == 'medium' %}bg-warning text-dark{% else %}bg-success{% endif %}">
+                                {{ service_request.get_priority_display }}
+                            </span>
+                        </dd>
+                        {% if service_request.product %}
+                        <dt>Thiết bị</dt>
+                        <dd>{{ service_request.product.name }}</dd>
+                        {% endif %}
+                        <dt>Ngày tạo</dt>
+                        <dd>{{ service_request.created_at|date:"d/m/Y H:i" }}</dd>
+                        {% if service_request.scheduled_date %}
+                        <dt>Ngày hẹn</dt>
+                        <dd>{{ service_request.scheduled_date|date:"d/m/Y H:i" }}</dd>
+                        {% endif %}
+                        {% if service_request.assigned_staff %}
+                        <dt>Nhân viên phụ trách</dt>
+                        <dd>{{ service_request.assigned_staff.get_full_name|default:service_request.assigned_staff.username }}</dd>
+                        {% endif %}
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

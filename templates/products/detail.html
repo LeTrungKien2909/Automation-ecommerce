@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} - AutoTech{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'products:list' %}">Sản phẩm</a></li>
+            {% if product.category %}
+            <li class="breadcrumb-item"><a href="{% url 'products:list' %}?category={{ product.category.slug }}">{{ product.category.name }}</a></li>
+            {% endif %}
+            <li class="breadcrumb-item active">{{ product.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row g-4">
+        <!-- Images -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-3">
+                    {% if product.main_image %}
+                    <img src="{{ product.main_image.url }}" id="mainImage" class="img-fluid rounded w-100" style="max-height:400px;object-fit:contain;" alt="{{ product.name }}">
+                    {% else %}
+                    <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height:400px;">
+                        <i class="fas fa-image fa-5x text-muted"></i>
+                    </div>
+                    {% endif %}
+                    {% if product.images.all %}
+                    <div class="d-flex gap-2 mt-3 flex-wrap">
+                        {% if product.main_image %}
+                        <img src="{{ product.main_image.url }}" class="thumbnail-img rounded border" style="width:70px;height:70px;object-fit:cover;cursor:pointer;" onclick="changeMainImage(this.src)" alt="">
+                        {% endif %}
+                        {% for img in product.images.all %}
+                        <img src="{{ img.image.url }}" class="thumbnail-img rounded border" style="width:70px;height:70px;object-fit:cover;cursor:pointer;" onclick="changeMainImage(this.src)" alt="{{ img.alt_text }}">
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Info -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    {% if product.category %}
+                    <span class="badge bg-primary mb-2">{{ product.category.name }}</span>
+                    {% endif %}
+                    {% if product.is_featured %}
+                    <span class="badge bg-warning text-dark mb-2 ms-1">Nổi bật</span>
+                    {% endif %}
+                    <h1 class="h3 fw-bold">{{ product.name }}</h1>
+
+                    <!-- Rating -->
+                    <div class="d-flex align-items-center mb-3">
+                        {% for i in "12345" %}
+                        <i class="fas fa-star {% if forloop.counter <= product.average_rating %}text-warning{% else %}text-muted{% endif %}"></i>
+                        {% endfor %}
+                        <small class="text-muted ms-2">({{ reviews.count }} đánh giá)</small>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="mb-3">
+                        {% if product.discount_price %}
+                        <span class="h3 text-danger fw-bold">{{ product.discount_price|floatformat:0 }} ₫</span>
+                        <span class="text-muted text-decoration-line-through ms-2">{{ product.price|floatformat:0 }} ₫</span>
+                        <span class="badge bg-danger ms-2">
+                            -{% widthratio product.discount_price product.price 100 as pct %}{{ 100|add:"-"|stringformat:"s"|add:pct|add:"%" }}
+                        </span>
+                        {% else %}
+                        <span class="h3 text-primary fw-bold">{{ product.price|floatformat:0 }} ₫</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Stock -->
+                    <div class="mb-3">
+                        {% if product.stock > 0 %}
+                        <span class="text-success"><i class="fas fa-check-circle me-1"></i>Còn hàng ({{ product.stock }} sản phẩm)</span>
+                        {% else %}
+                        <span class="text-danger"><i class="fas fa-times-circle me-1"></i>Hết hàng</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Add to Cart -->
+                    {% if product.stock > 0 %}
+                    <form action="{% url 'orders:add_to_cart' %}" method="post" class="mb-4">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ product.pk }}">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="input-group" style="width:130px;">
+                                <button type="button" class="btn btn-outline-secondary" onclick="adjustQty(-1)">-</button>
+                                <input type="number" name="quantity" id="qtyInput" class="form-control text-center cart-qty-input" value="1" min="1" max="{{ product.stock }}">
+                                <button type="button" class="btn btn-outline-secondary" onclick="adjustQty(1)">+</button>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg px-4">
+                                <i class="fas fa-cart-plus me-2"></i>Thêm vào giỏ
+                            </button>
+                        </div>
+                    </form>
+                    {% endif %}
+
+                    <div class="d-flex gap-3 text-muted small">
+                        <span><i class="fas fa-truck me-1"></i>Giao hàng toàn quốc</span>
+                        <span><i class="fas fa-shield-alt me-1"></i>Bảo hành chính hãng</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="productTabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#description">Mô tả</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#specs">Thông số kỹ thuật</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#reviews">Đánh giá ({{ reviews.count }})</a>
+                </li>
+            </ul>
+            <div class="tab-content pt-3">
+                <div class="tab-pane fade show active" id="description">
+                    {{ product.description|linebreaks }}
+                </div>
+                <div class="tab-pane fade" id="specs">
+                    {% if product.specifications %}
+                    {{ product.specifications|linebreaks }}
+                    {% else %}
+                    <p class="text-muted">Chưa có thông số kỹ thuật.</p>
+                    {% endif %}
+                </div>
+                <div class="tab-pane fade" id="reviews">
+                    {% if user.is_authenticated %}
+                    <div class="card bg-light border-0 mb-4">
+                        <div class="card-body">
+                            <h6 class="fw-bold mb-3">Viết đánh giá của bạn</h6>
+                            {% load crispy_forms_tags %}
+                            <form action="{% url 'products:add_review' product.pk %}" method="post">
+                                {% csrf_token %}
+                                {% crispy review_form %}
+                            </form>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info">
+                        <a href="{% url 'users:login' %}">Đăng nhập</a> để viết đánh giá.
+                    </div>
+                    {% endif %}
+
+                    {% for review in reviews %}
+                    <div class="border-bottom pb-3 mb-3">
+                        <div class="d-flex justify-content-between">
+                            <strong>{{ review.user.get_full_name|default:review.user.username }}</strong>
+                            <small class="text-muted">{{ review.created_at|date:"d/m/Y" }}</small>
+                        </div>
+                        <div class="text-warning mb-1">
+                            {% for i in "12345" %}
+                            <i class="fas fa-star {% if forloop.counter <= review.rating %}text-warning{% else %}text-muted{% endif %}"></i>
+                            {% endfor %}
+                        </div>
+                        <p class="mb-0">{{ review.comment }}</p>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted">Chưa có đánh giá nào. Hãy là người đầu tiên!</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    {% if related_products %}
+    <div class="mt-4">
+        <h5 class="fw-bold mb-3">Sản phẩm liên quan</h5>
+        <div class="row g-3">
+            {% for rp in related_products %}
+            <div class="col-sm-6 col-lg-3">
+                <div class="card product-card h-100 border-0 shadow-sm">
+                    <a href="{% url 'products:detail' rp.slug %}">
+                        {% if rp.main_image %}
+                        <img src="{{ rp.main_image.url }}" class="card-img-top product-img" alt="{{ rp.name }}">
+                        {% else %}
+                        <div class="card-img-top product-img bg-light d-flex align-items-center justify-content-center">
+                            <i class="fas fa-image fa-3x text-muted"></i>
+                        </div>
+                        {% endif %}
+                    </a>
+                    <div class="card-body">
+                        <h6><a href="{% url 'products:detail' rp.slug %}" class="text-decoration-none text-dark">{{ rp.name }}</a></h6>
+                        <div class="text-primary fw-bold">{{ rp.effective_price|floatformat:0 }} ₫</div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function adjustQty(delta) {
+    const input = document.getElementById('qtyInput');
+    const val = parseInt(input.value) + delta;
+    const max = parseInt(input.max);
+    if (val >= 1 && val <= max) input.value = val;
+}
+function changeMainImage(src) {
+    document.getElementById('mainImage').src = src;
+}
+</script>
+{% endblock %}

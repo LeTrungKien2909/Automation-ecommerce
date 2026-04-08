@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Yêu cầu bảo trì - AutoTech{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h4 class="mb-0"><i class="fas fa-tools me-2 text-primary"></i>Gửi yêu cầu bảo trì</h4>
+                    <p class="text-muted mb-0 mt-1">Mô tả yêu cầu bảo trì thiết bị của bạn, đội kỹ thuật sẽ liên hệ trong thời gian sớm nhất.</p>
+                </div>
+                <div class="card-body">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        {% crispy form %}
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0">Thông tin hỗ trợ</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <i class="fas fa-phone-alt text-primary me-2"></i>
+                            <strong>Hotline kỹ thuật:</strong><br>
+                            <span class="ms-4">0900 123 456</span>
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-clock text-primary me-2"></i>
+                            <strong>Thời gian làm việc:</strong><br>
+                            <span class="ms-4">T2 - T7: 8:00 - 18:00</span>
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-envelope text-primary me-2"></i>
+                            <strong>Email hỗ trợ:</strong><br>
+                            <span class="ms-4">support@autotech.vn</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-headset text-primary me-2"></i>
+                            <strong>Hỗ trợ khẩn cấp:</strong><br>
+                            <span class="ms-4">24/7 cho sự cố nghiêm trọng</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
