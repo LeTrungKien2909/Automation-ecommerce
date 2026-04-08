@@ -58,6 +58,12 @@ class Product(models.Model):
     def effective_price(self):
         return self.discount_price if self.discount_price else self.price
 
+    @property
+    def savings(self):
+        if self.discount_price:
+            return self.price - self.discount_price
+        return None
+
     def __str__(self):
         return self.name
 
