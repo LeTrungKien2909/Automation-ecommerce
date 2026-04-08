@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Maintenance Services - AutomationPro{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="bg-dark text-white py-5">
+    <div class="container text-center">
+        <i class="bi bi-tools text-warning" style="font-size: 3rem;"></i>
+        <h1 class="fw-bold mt-3">Professional Maintenance Services</h1>
+        <p class="text-white-50 lead">Expert technicians for your industrial automation equipment</p>
+        <a href="{% url 'services:create_request' %}" class="btn btn-warning btn-lg px-5 fw-bold mt-2">
+            <i class="bi bi-calendar-plus me-2"></i>Request a Service
+        </a>
+    </div>
+</section>
+
+<div class="container py-5">
+    {% if service_types %}
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Our Service Offerings</h2>
+        <p class="text-muted">Choose from our range of professional maintenance and support services</p>
+    </div>
+    <div class="row g-4">
+        {% for service in service_types %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm service-card">
+                <div class="card-body p-4">
+                    <div class="service-icon mb-3">
+                        <i class="bi bi-wrench-adjustable text-warning" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">{{ service.name }}</h5>
+                    <p class="card-text text-muted">{{ service.description }}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                        <div>
+                            <span class="text-warning fw-bold fs-5">${{ service.price_per_hour }}</span>
+                            <span class="text-muted small">/hour</span>
+                        </div>
+                        <a href="{% url 'services:create_request' %}?service={{ service.id }}" class="btn btn-warning btn-sm px-3">
+                            Book Now <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-tools text-muted" style="font-size: 4rem;"></i>
+        <h3 class="mt-3 text-muted">Service catalog coming soon</h3>
+        <p class="text-muted">Please contact us directly for service inquiries</p>
+    </div>
+    {% endif %}
+
+    <!-- Why Choose Us -->
+    <div class="row g-4 mt-5 pt-3 border-top">
+        <div class="col-12 text-center mb-3">
+            <h3 class="fw-bold">Why Choose Our Services?</h3>
+        </div>
+        <div class="col-md-3 text-center">
+            <i class="bi bi-patch-check text-warning fs-1 mb-3 d-block"></i>
+            <h6 class="fw-bold">Certified Technicians</h6>
+            <p class="text-muted small">All our technicians are factory-certified and regularly trained</p>
+        </div>
+        <div class="col-md-3 text-center">
+            <i class="bi bi-clock-history text-warning fs-1 mb-3 d-block"></i>
+            <h6 class="fw-bold">24/7 Emergency</h6>
+            <p class="text-muted small">Round-the-clock emergency response for critical breakdowns</p>
+        </div>
+        <div class="col-md-3 text-center">
+            <i class="bi bi-graph-up-arrow text-warning fs-1 mb-3 d-block"></i>
+            <h6 class="fw-bold">Maximize Uptime</h6>
+            <p class="text-muted small">Preventive maintenance programs to minimize costly downtime</p>
+        </div>
+        <div class="col-md-3 text-center">
+            <i class="bi bi-file-earmark-check text-warning fs-1 mb-3 d-block"></i>
+            <h6 class="fw-bold">Full Documentation</h6>
+            <p class="text-muted small">Detailed service reports and maintenance records provided</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

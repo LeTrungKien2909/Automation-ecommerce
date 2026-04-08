@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Order #{{ order.order_number }} - AutomationPro{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold mb-1"><i class="bi bi-bag-check me-2 text-warning"></i>Order #{{ order.order_number }}</h1>
+            <p class="text-muted mb-0">Placed on {{ order.created_at|date:"F d, Y \a\t H:i" }}</p>
+        </div>
+        <div>
+            <span class="badge fs-6
+                {% if order.status == 'pending' %}bg-warning text-dark
+                {% elif order.status == 'confirmed' %}bg-info
+                {% elif order.status == 'processing' %}bg-primary
+                {% elif order.status == 'shipped' %}bg-warning text-dark
+                {% elif order.status == 'delivered' %}bg-success
+                {% elif order.status == 'cancelled' %}bg-danger
+                {% endif %}">
+                {{ order.get_status_display }}
+            </span>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Order Items -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white fw-bold border-bottom">
+                    <i class="bi bi-box-seam me-2 text-warning"></i>Order Items
+                </div>
+                <div class="card-body p-0">
+                    <table class="table mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4">Product</th>
+                                <th class="text-center">Unit Price</th>
+                                <th class="text-center">Qty</th>
+                                <th class="text-end pe-4">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order.items.all %}
+                            <tr>
+                                <td class="ps-4 py-3">
+                                    <div class="fw-semibold">{{ item.product_name }}</div>
+                                    <div class="text-muted small">SKU: {{ item.product_sku }}</div>
+                                </td>
+                                <td class="text-center align-middle">${{ item.unit_price }}</td>
+                                <td class="text-center align-middle">{{ item.quantity }}</td>
+                                <td class="text-end pe-4 align-middle fw-bold">${{ item.subtotal }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot class="table-light">
+                            <tr>
+                                <td colspan="3" class="text-end fw-bold pe-3">Subtotal:</td>
+                                <td class="text-end pe-4">${{ order.subtotal }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="text-end fw-bold pe-3">Shipping:</td>
+                                <td class="text-end pe-4 text-success">{% if order.shipping_cost == 0 %}Free{% else %}${{ order.shipping_cost }}{% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="text-end fw-bold fs-5 pe-3">Total:</td>
+                                <td class="text-end pe-4 fw-bold fs-5 text-warning">${{ order.total }}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            {% if order.notes %}
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white fw-bold border-bottom">
+                    <i class="bi bi-chat-text me-2 text-warning"></i>Order Notes
+                </div>
+                <div class="card-body">
+                    <p class="mb-0 text-muted">{{ order.notes }}</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Shipping Info -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white fw-bold border-bottom">
+                    <i class="bi bi-truck me-2 text-warning"></i>Shipping Details
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-5 text-muted small">Name:</dt>
+                        <dd class="col-7 small">{{ order.shipping_name }}</dd>
+                        <dt class="col-5 text-muted small">Email:</dt>
+                        <dd class="col-7 small">{{ order.shipping_email }}</dd>
+                        <dt class="col-5 text-muted small">Phone:</dt>
+                        <dd class="col-7 small">{{ order.shipping_phone }}</dd>
+                        <dt class="col-5 text-muted small">Address:</dt>
+                        <dd class="col-7 small">{{ order.shipping_address }}</dd>
+                        <dt class="col-5 text-muted small">City:</dt>
+                        <dd class="col-7 small">{{ order.shipping_city }}</dd>
+                        <dt class="col-5 text-muted small">Country:</dt>
+                        <dd class="col-7 small">{{ order.shipping_country }}</dd>
+                        <dt class="col-5 text-muted small">Postal Code:</dt>
+                        <dd class="col-7 small">{{ order.shipping_postal_code }}</dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="mt-3">
+                <a href="{% url 'orders:order_list' %}" class="btn btn-outline-dark w-100">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Orders
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

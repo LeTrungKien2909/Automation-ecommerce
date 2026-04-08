@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Request Service - AutomationPro{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'catalog:home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'services:service_list' %}">Services</a></li>
+            <li class="breadcrumb-item active">Request Service</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-dark text-white fw-bold">
+                    <i class="bi bi-calendar-plus me-2"></i>Submit Service Request
+                </div>
+                <div class="card-body p-4">
+                    <p class="text-muted mb-4">
+                        Fill out the form below to submit a service request. Our team will review and respond within 1 business day.
+                    </p>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <div class="d-flex gap-3 mt-4">
+                            <button type="submit" class="btn btn-warning fw-bold px-5">
+                                <i class="bi bi-send me-2"></i>Submit Request
+                            </button>
+                            <a href="{% url 'services:service_list' %}" class="btn btn-outline-secondary px-4">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm bg-light">
+                <div class="card-body p-4">
+                    <h6 class="fw-bold mb-3"><i class="bi bi-info-circle text-warning me-2"></i>What to Expect</h6>
+                    <ul class="list-unstyled text-muted small">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Confirmation within 1 business day</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Technician assigned based on priority</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Estimated cost provided upfront</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Real-time status updates</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Full service report on completion</li>
+                    </ul>
+                    <hr>
+                    <h6 class="fw-bold mb-2"><i class="bi bi-telephone text-warning me-2"></i>Urgent Help?</h6>
+                    <p class="text-muted small mb-0">Call our 24/7 emergency line:<br>
+                        <strong class="text-dark">+1 (555) 999-0000</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
