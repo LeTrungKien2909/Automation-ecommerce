@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Thông tin cá nhân - AutoTech{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row g-4">
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm text-center p-3">
+                {% if profile.avatar %}
+                <img src="{{ profile.avatar.url }}" class="rounded-circle mx-auto mb-3" style="width:100px;height:100px;object-fit:cover;" alt="">
+                {% else %}
+                <div class="bg-primary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width:100px;height:100px;">
+                    <i class="fas fa-user fa-3x text-white"></i>
+                </div>
+                {% endif %}
+                <h5 class="fw-bold">{{ user.get_full_name|default:user.username }}</h5>
+                <span class="badge bg-{{ user.role|default:'customer' }}">
+                    {{ user.get_role_display }}
+                </span>
+                <ul class="list-group list-group-flush mt-3 text-start">
+                    <li class="list-group-item"><a href="{% url 'users:dashboard' %}" class="text-decoration-none"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+                    <li class="list-group-item active"><i class="fas fa-user-edit me-2"></i>Thông tin</li>
+                    <li class="list-group-item"><a href="{% url 'orders:order_list' %}" class="text-decoration-none"><i class="fas fa-list-alt me-2"></i>Đơn hàng</a></li>
+                    <li class="list-group-item"><a href="{% url 'maintenance:list' %}" class="text-decoration-none"><i class="fas fa-tools me-2"></i>Bảo trì</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="fas fa-user-edit me-2"></i>Cập nhật thông tin</h5>
+                </div>
+                <div class="card-body">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% crispy form %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

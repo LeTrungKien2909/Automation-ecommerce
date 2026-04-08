@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Quản lý sản phẩm - AutoTech{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold mb-0"><i class="fas fa-box me-2"></i>Quản lý sản phẩm</h3>
+        <a href="{% url 'admin:products_product_add' %}" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i>Thêm sản phẩm
+        </a>
+    </div>
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Danh mục</th>
+                            <th class="text-end">Giá</th>
+                            <th class="text-center">Tồn kho</th>
+                            <th class="text-center">Trạng thái</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    {% if product.main_image %}
+                                    <img src="{{ product.main_image.url }}" style="width:40px;height:40px;object-fit:cover;" class="rounded" alt="">
+                                    {% endif %}
+                                    <strong>{{ product.name }}</strong>
+                                </div>
+                            </td>
+                            <td>{{ product.category.name|default:"-" }}</td>
+                            <td class="text-end">{{ product.effective_price|floatformat:0 }} ₫</td>
+                            <td class="text-center">{{ product.stock }}</td>
+                            <td class="text-center">
+                                {% if product.is_active %}
+                                <span class="badge bg-success">Đang bán</span>
+                                {% else %}
+                                <span class="badge bg-secondary">Ẩn</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'admin:products_product_change' product.pk %}" class="btn btn-outline-primary btn-sm">Sửa</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="6" class="text-center text-muted py-3">Chưa có sản phẩm nào.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

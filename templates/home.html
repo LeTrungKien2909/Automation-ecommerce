@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}AutoTech - Thiết Bị Tự Động Hóa Công Nghiệp{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="display-4 fw-bold text-white mb-4">
+                    Thiết Bị Tự Động Hóa <br><span class="text-warning">Công Nghiệp</span> Chuyên Nghiệp
+                </h1>
+                <p class="lead text-white-50 mb-4">
+                    Cung cấp đa dạng thiết bị tự động hóa công nghiệp chất lượng cao: PLC, biến tần, cảm biến, robot công nghiệp và hệ thống điều khiển.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'products:list' %}" class="btn btn-warning btn-lg px-4">
+                        <i class="fas fa-box me-2"></i>Xem sản phẩm
+                    </a>
+                    <a href="{% url 'maintenance:create' %}" class="btn btn-outline-light btn-lg px-4">
+                        <i class="fas fa-tools me-2"></i>Yêu cầu bảo trì
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block text-center">
+                <i class="fas fa-industry text-white-25" style="font-size: 200px; opacity: 0.15;"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Bar -->
+<section class="bg-warning py-3">
+    <div class="container">
+        <div class="row text-center g-3">
+            <div class="col-md-3">
+                <div class="d-flex align-items-center justify-content-center gap-2">
+                    <i class="fas fa-box-open fa-2x"></i>
+                    <div class="text-start">
+                        <div class="fw-bold fs-5">500+</div>
+                        <small>Sản phẩm</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="d-flex align-items-center justify-content-center gap-2">
+                    <i class="fas fa-users fa-2x"></i>
+                    <div class="text-start">
+                        <div class="fw-bold fs-5">1000+</div>
+                        <small>Khách hàng</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="d-flex align-items-center justify-content-center gap-2">
+                    <i class="fas fa-award fa-2x"></i>
+                    <div class="text-start">
+                        <div class="fw-bold fs-5">10+</div>
+                        <small>Năm kinh nghiệm</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="d-flex align-items-center justify-content-center gap-2">
+                    <i class="fas fa-headset fa-2x"></i>
+                    <div class="text-start">
+                        <div class="fw-bold fs-5">24/7</div>
+                        <small>Hỗ trợ kỹ thuật</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+{% if categories %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-2">Danh Mục Sản Phẩm</h2>
+        <p class="text-center text-muted mb-4">Khám phá các dòng sản phẩm tự động hóa của chúng tôi</p>
+        <div class="row g-3">
+            {% for category in categories %}
+            <div class="col-6 col-md-4 col-lg-3">
+                <a href="{% url 'products:list' %}?category={{ category.slug }}" class="text-decoration-none">
+                    <div class="card category-card text-center h-100 border-0 shadow-sm">
+                        <div class="card-body py-4">
+                            {% if category.image %}
+                            <img src="{{ category.image.url }}" alt="{{ category.name }}" class="mb-3" style="height:60px;object-fit:contain;">
+                            {% else %}
+                            <i class="fas fa-microchip fa-3x text-primary mb-3"></i>
+                            {% endif %}
+                            <h6 class="card-title fw-bold text-dark">{{ category.name }}</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Featured Products -->
+{% if featured_products %}
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold mb-1">Sản Phẩm Nổi Bật</h2>
+                <p class="text-muted mb-0">Các thiết bị được khách hàng tin dùng nhất</p>
+            </div>
+            <a href="{% url 'products:list' %}" class="btn btn-outline-primary">Xem tất cả <i class="fas fa-arrow-right ms-1"></i></a>
+        </div>
+        <div class="row g-4">
+            {% for product in featured_products %}
+            <div class="col-sm-6 col-lg-3">
+                <div class="card product-card h-100 border-0 shadow-sm">
+                    <a href="{% url 'products:detail' product.slug %}">
+                        {% if product.main_image %}
+                        <img src="{{ product.main_image.url }}" class="card-img-top product-img" alt="{{ product.name }}">
+                        {% else %}
+                        <div class="card-img-top product-img bg-light d-flex align-items-center justify-content-center">
+                            <i class="fas fa-image fa-3x text-muted"></i>
+                        </div>
+                        {% endif %}
+                    </a>
+                    <div class="card-body d-flex flex-column">
+                        <h6 class="card-title">
+                            <a href="{% url 'products:detail' product.slug %}" class="text-decoration-none text-dark">{{ product.name }}</a>
+                        </h6>
+                        <div class="mt-auto">
+                            {% if product.discount_price %}
+                            <div class="text-danger fw-bold">{{ product.discount_price|floatformat:0 }} ₫</div>
+                            <small class="text-muted text-decoration-line-through">{{ product.price|floatformat:0 }} ₫</small>
+                            {% else %}
+                            <div class="text-primary fw-bold">{{ product.price|floatformat:0 }} ₫</div>
+                            {% endif %}
+                            <form action="{% url 'orders:add_to_cart' %}" method="post" class="mt-2">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{ product.pk }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="btn btn-primary btn-sm w-100">
+                                    <i class="fas fa-cart-plus me-1"></i>Thêm vào giỏ
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Why Choose Us -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-2">Tại Sao Chọn AutoTech?</h2>
+        <p class="text-center text-muted mb-5">Cam kết chất lượng và dịch vụ tốt nhất</p>
+        <div class="row g-4 text-center">
+            <div class="col-md-4">
+                <div class="p-4">
+                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:80px;height:80px;">
+                        <i class="fas fa-certificate fa-2x text-white"></i>
+                    </div>
+                    <h5 class="fw-bold">Sản phẩm chính hãng</h5>
+                    <p class="text-muted">100% sản phẩm nhập khẩu chính hãng, có đầy đủ giấy tờ kiểm định chất lượng.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4">
+                    <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:80px;height:80px;">
+                        <i class="fas fa-shipping-fast fa-2x text-white"></i>
+                    </div>
+                    <h5 class="fw-bold">Giao hàng nhanh</h5>
+                    <p class="text-muted">Giao hàng toàn quốc trong vòng 24-48 giờ. Đóng gói chuyên nghiệp, an toàn.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4">
+                    <div class="bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:80px;height:80px;">
+                        <i class="fas fa-tools fa-2x text-white"></i>
+                    </div>
+                    <h5 class="fw-bold">Hỗ trợ kỹ thuật</h5>
+                    <p class="text-muted">Đội ngũ kỹ thuật viên giàu kinh nghiệm, hỗ trợ lắp đặt, bảo trì 24/7.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

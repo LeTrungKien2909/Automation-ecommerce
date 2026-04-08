@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - AutoTech{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h3 class="fw-bold mb-4">
+        <i class="fas fa-tachometer-alt me-2"></i>Xin chào, {{ user.first_name|default:user.username }}!
+    </h3>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center p-3 bg-primary text-white">
+                <i class="fas fa-list-alt fa-2x mb-2"></i>
+                <h4 class="fw-bold">{{ user.orders.count }}</h4>
+                <small>Đơn hàng</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center p-3 bg-success text-white">
+                <i class="fas fa-tools fa-2x mb-2"></i>
+                <h4 class="fw-bold">{{ user.service_requests.count }}</h4>
+                <small>Yêu cầu bảo trì</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center p-3 bg-warning">
+                <i class="fas fa-user fa-2x mb-2"></i>
+                <h6 class="fw-bold">{{ user.get_role_display }}</h6>
+                <small>Vai trò</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center p-3 bg-info text-white">
+                <i class="fas fa-calendar fa-2x mb-2"></i>
+                <h6 class="fw-bold">{{ user.date_joined|date:"d/m/Y" }}</h6>
+                <small>Ngày tham gia</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Recent Orders -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between">
+                    <h6 class="mb-0"><i class="fas fa-list-alt me-2"></i>Đơn hàng gần đây</h6>
+                    <a href="{% url 'orders:order_list' %}" class="btn btn-sm btn-outline-primary">Xem tất cả</a>
+                </div>
+                <div class="card-body p-0">
+                    {% if recent_orders %}
+                    <div class="table-responsive">
+                        <table class="table mb-0 small">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Mã đơn</th>
+                                    <th>Ngày</th>
+                                    <th>Trạng thái</th>
+                                    <th class="text-end">Tổng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in recent_orders %}
+                                <tr>
+                                    <td><a href="{% url 'orders:order_detail' order.order_number %}">{{ order.order_number }}</a></td>
+                                    <td>{{ order.created_at|date:"d/m" }}</td>
+                                    <td><span class="badge status-{{ order.status }}">{{ order.get_status_display }}</span></td>
+                                    <td class="text-end">{{ order.total_amount|floatformat:0 }} ₫</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-center text-muted py-3">Chưa có đơn hàng nào.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Service Requests -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between">
+                    <h6 class="mb-0"><i class="fas fa-tools me-2"></i>Yêu cầu bảo trì gần đây</h6>
+                    <a href="{% url 'maintenance:list' %}" class="btn btn-sm btn-outline-primary">Xem tất cả</a>
+                </div>
+                <div class="card-body p-0">
+                    {% if recent_service_requests %}
+                    <div class="table-responsive">
+                        <table class="table mb-0 small">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Tiêu đề</th>
+                                    <th>Ưu tiên</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for req in recent_service_requests %}
+                                <tr>
+                                    <td><a href="{% url 'maintenance:detail' req.pk %}">{{ req.title|truncatechars:30 }}</a></td>
+                                    <td><span class="badge bg-{{ req.priority }}">{{ req.get_priority_display }}</span></td>
+                                    <td><span class="badge status-{{ req.status }}">{{ req.get_status_display }}</span></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-center text-muted py-3">Chưa có yêu cầu bảo trì nào.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4 d-flex gap-3 flex-wrap">
+        <a href="{% url 'products:list' %}" class="btn btn-primary">
+            <i class="fas fa-box me-2"></i>Mua sắm
+        </a>
+        <a href="{% url 'maintenance:create' %}" class="btn btn-outline-primary">
+            <i class="fas fa-tools me-2"></i>Yêu cầu bảo trì
+        </a>
+        <a href="{% url 'users:profile' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-user-edit me-2"></i>Cập nhật thông tin
+        </a>
+    </div>
+</div>
+{% endblock %}
